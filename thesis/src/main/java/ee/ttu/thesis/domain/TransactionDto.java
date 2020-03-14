@@ -10,12 +10,12 @@ import java.time.LocalDate;
 @Builder
 public class TransactionDto {
     private String AccountNumber;
-    private String DocumentNumber;
     private LocalDate Date;
     private String BeneficiaryOrPayerAccount;
     private String BeneficiaryOrPayerName;
-    private String Details; //selgitus
+    private String Details;
     private BigDecimal Amount;
     private String Currency;
     private String DebitOrCredit;
+    private IncomeStatementType IncomeStatementType;
 }

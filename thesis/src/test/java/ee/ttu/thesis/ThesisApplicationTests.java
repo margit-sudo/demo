@@ -11,7 +11,7 @@ import java.text.ParseException;
 class ThesisApplicationTests {
 
 	@Test
-	void contextLoads() throws ParseException {
+	void contextLoads() throws IOException {
 		TransactionService s = new TransactionService();
 		s.parseCsvFileToTransaction();
 	}

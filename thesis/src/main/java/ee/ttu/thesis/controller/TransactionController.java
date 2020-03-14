@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/transactions")
 @RequiredArgsConstructor
@@ -15,9 +18,9 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
-    @GetMapping("/{data}")
-    public TransactionDto getTransactionData(@PathVariable String data) {
-        return transactionService.getTransactionDto(data);
+    @GetMapping("/all")
+    public List<TransactionDto> getAllTransactions() throws IOException {
+        return transactionService.parseCsvFileToTransaction();
     }
 
 }
