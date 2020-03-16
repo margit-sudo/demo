@@ -3,10 +3,7 @@ package ee.ttu.thesis.controller;
 import ee.ttu.thesis.domain.TransactionDto;
 import ee.ttu.thesis.service.TransactionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +18,11 @@ public class TransactionController {
     @GetMapping("/all")
     public List<TransactionDto> getAllTransactions() throws IOException {
         return transactionService.parseCsvFileToTransaction();
+    }
+
+    @PutMapping("/update")
+    public void updateTransactionIncomeStatementTypes(List<TransactionDto> transactions){
+        transactionService.updateTransactionIncomeStatementTypes(transactions);
     }
 
 }

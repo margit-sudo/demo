@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class TransactionDto {
+    private String Id;
     private String AccountNumber;
     private LocalDate Date;
     private String BeneficiaryOrPayerAccount;

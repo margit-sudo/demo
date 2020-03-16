@@ -13,12 +13,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class TransactionService {
     String csvFile = "C:\\Users\\birgi\\Documents\\Äriinfotehnoloogia\\lõputöö/marksu eng 2019.csv";
+    List<TransactionDto> transactionList = new ArrayList<>();
 
     public TransactionDto getTransactionDto(String data) {
         return null;
@@ -26,7 +28,6 @@ public class TransactionService {
     }
 
     public List<TransactionDto> parseCsvFileToTransaction() throws IOException {
-        List<TransactionDto> transactionList = new ArrayList<>();
         String line = "";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
@@ -37,6 +38,7 @@ public class TransactionService {
                 String[] currentLine = line.split(";");
 
                 transactionList.add(TransactionDto.builder().
+                        Id(UUID.randomUUID().toString()).
                         AccountNumber(currentLine[0]).
                         Date(LocalDate.parse(currentLine[2], DateTimeFormatter.ofPattern("dd-MM-yyyy"))).
                         BeneficiaryOrPayerAccount(currentLine[3]).
@@ -50,5 +52,15 @@ public class TransactionService {
             throw new IOException("Cannot parse the file!");
         }
         return transactionList;
+    }
+
+    public void updateTransactionIncomeStatementTypes(List<TransactionDto> transactions) {
+       /* for (TransactionDto t : transactions) {
+            for (TransactionDto databaseTransaction: transactionList){
+                if(t.getId().equals(databaseTransaction.getId())){
+                    databaseTransaction.setIncomeStatementType(t.getIncomeStatementType());
+                }
+            }
+        }*/
     }
 }
