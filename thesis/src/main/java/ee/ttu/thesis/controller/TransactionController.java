@@ -1,6 +1,6 @@
 package ee.ttu.thesis.controller;
 
-import ee.ttu.thesis.domain.TransactionDto;
+import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +16,13 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping("/all")
-    public List<TransactionDto> getAllTransactions() throws IOException {
-        return transactionService.parseCsvFileToTransaction();
+    public List<Transaction> getAllTransactions() throws IOException {
+        transactionService.addTransactionsFromFile();
+        return transactionService.getTransactionsList();
     }
 
     @PutMapping("/update")
-    public void updateTransactionIncomeStatementTypes(List<TransactionDto> transactions){
+    public void updateTransactionIncomeStatementTypes(List<Transaction> transactions){
         transactionService.updateTransactionIncomeStatementTypes(transactions);
     }
-
 }

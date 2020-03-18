@@ -1,7 +1,8 @@
 package ee.ttu.thesis.service;
 
-import ee.ttu.thesis.domain.TransactionDto;
-import lombok.RequiredArgsConstructor;
+import ee.ttu.thesis.domain.Transaction;
+import ee.ttu.thesis.repository.TransactionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -13,22 +14,28 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class TransactionService {
     String csvFile = "C:\\Users\\birgi\\Documents\\Äriinfotehnoloogia\\lõputöö/marksu eng 2019.csv";
-    List<TransactionDto> transactionList = new ArrayList<>();
+    @Autowired
+    private TransactionRepository repo;
 
-    public TransactionDto getTransactionDto(String data) {
-        return null;
-        //return TransactionDto.builder().data("Hello world! My data is " + data).build();
+    public void addTransactionsFromFile() throws IOException {
+        List<Transaction> transactionsFromCvs = parseCsvFileToTransactionList();
+        for (Transaction transactionFromCvs : transactionsFromCvs) {
+            repo.save(transactionFromCvs);
+        }
     }
 
-    public List<TransactionDto> parseCsvFileToTransaction() throws IOException {
+    public List<Transaction> getTransactionsList(){
+        return repo.findAll();
+    }
+
+    private List<Transaction> parseCsvFileToTransactionList() throws IOException {
         String line = "";
+        List<Transaction> transactionList = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             String ignorefirstLine = br.readLine();
@@ -37,16 +44,15 @@ public class TransactionService {
                 line = line.replace("\"", "");
                 String[] currentLine = line.split(";");
 
-                transactionList.add(TransactionDto.builder().
-                        Id(UUID.randomUUID().toString()).
-                        AccountNumber(currentLine[0]).
-                        Date(LocalDate.parse(currentLine[2], DateTimeFormatter.ofPattern("dd-MM-yyyy"))).
-                        BeneficiaryOrPayerAccount(currentLine[3]).
-                        BeneficiaryOrPayerName(currentLine[4]).
-                        DebitOrCredit(currentLine[7]).
-                        Amount(new BigDecimal(currentLine[8].replace(",", "."))).
-                        Details(currentLine[11]).
-                        Currency(currentLine[13]).build());
+                transactionList.add(Transaction.builder().
+                        accountNumber(currentLine[0]).
+                        date(LocalDate.parse(currentLine[2], DateTimeFormatter.ofPattern("dd-MM-yyyy"))).
+                        beneficiaryOrPayerAccount(currentLine[3]).
+                        beneficiaryOrPayerName(currentLine[4]).
+                        debitOrCredit(currentLine[7]).
+                        amount(new BigDecimal(currentLine[8].replace(",", "."))).
+                        details(currentLine[11]).
+                        currency(currentLine[13]).build());
             }
         } catch (IOException e) {
             throw new IOException("Cannot parse the file!");
@@ -54,7 +60,7 @@ public class TransactionService {
         return transactionList;
     }
 
-    public void updateTransactionIncomeStatementTypes(List<TransactionDto> transactions) {
+    public void updateTransactionIncomeStatementTypes(List<Transaction> transactions) {
        /* for (TransactionDto t : transactions) {
             for (TransactionDto databaseTransaction: transactionList){
                 if(t.getId().equals(databaseTransaction.getId())){
