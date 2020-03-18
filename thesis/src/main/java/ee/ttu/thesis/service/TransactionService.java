@@ -14,18 +14,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class TransactionService {
-    String csvFile = "C:\\Users\\birgi\\Documents\\Äriinfotehnoloogia\\lõputöö/marksu eng 2019.csv";
     @Autowired
     private TransactionRepository repo;
+    String csvFile = "C:\\Users\\birgi\\Documents\\Äriinfotehnoloogia\\lõputöö/marksu eng 2019.csv";
 
     public void addTransactionsFromFile() throws IOException {
-        List<Transaction> transactionsFromCvs = parseCsvFileToTransactionList();
-        for (Transaction transactionFromCvs : transactionsFromCvs) {
-            repo.save(transactionFromCvs);
+        List<Transaction> transactionsFromCvs = parseTransactionFileToList();
+        for (Transaction t : transactionsFromCvs) {
+            repo.save(t);
         }
     }
 
@@ -33,7 +34,7 @@ public class TransactionService {
         return repo.findAll();
     }
 
-    private List<Transaction> parseCsvFileToTransactionList() throws IOException {
+    private List<Transaction> parseTransactionFileToList() throws IOException {
         String line = "";
         List<Transaction> transactionList = new ArrayList<>();
 
@@ -61,12 +62,12 @@ public class TransactionService {
     }
 
     public void updateTransactionIncomeStatementTypes(List<Transaction> transactions) {
-       /* for (TransactionDto t : transactions) {
-            for (TransactionDto databaseTransaction: transactionList){
-                if(t.getId().equals(databaseTransaction.getId())){
-                    databaseTransaction.setIncomeStatementType(t.getIncomeStatementType());
-                }
-            }
-        }*/
+        for (Transaction t : transactions) {
+            Optional<Transaction> dbTransaction = repo.findById(t.getId());
+            dbTransaction.ifPresent(transaction -> {
+                    transaction = Transaction.class.cast(dbTransaction);
+                    transaction.setIncomeStatementType(t.getIncomeStatementType());
+                    });
+        }
     }
 }

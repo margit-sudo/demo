@@ -16,13 +16,20 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping("/all")
-    public List<Transaction> getAllTransactions() throws IOException {
-        transactionService.addTransactionsFromFile();
+    public List<Transaction> getAllTransactions(){
+        //transactionService.addTransactionsFromFile();
         return transactionService.getTransactionsList();
     }
 
-    @PutMapping("/update")
-    public void updateTransactionIncomeStatementTypes(List<Transaction> transactions){
+    @GetMapping("/insert")
+    public void insertTestData() throws IOException {
+        transactionService.addTransactionsFromFile();
+    }
+
+
+    @PostMapping("/update")
+    @ResponseBody
+    public void updateTransactionIncomeStatementTypes(@RequestBody List<Transaction> transactions){
         transactionService.updateTransactionIncomeStatementTypes(transactions);
     }
 }
