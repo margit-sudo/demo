@@ -59,7 +59,8 @@ public class ThesisApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/api/**").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/**")
+						.allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
 			}
 		};
 	}
