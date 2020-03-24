@@ -4,7 +4,6 @@ import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.service.TransactionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;

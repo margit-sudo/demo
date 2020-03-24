@@ -1,6 +1,7 @@
 package ee.ttu.thesis.service;
 
 import ee.ttu.thesis.domain.IncomeStatementType;
+import ee.ttu.thesis.domain.Rule;
 import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +77,11 @@ public class TransactionService {
         repo.findById(id).ifPresent(
                 t -> t.setIncomeStatementType(type));
         return repo.findById(id);
+    }
+
+    public void updateTransactionIncomeStatementTypesWithRule(Rule rule) {
+       // updateTransactionAccordingToDetailsRule(rule.getTransactionDetails());
+        //updateTransactionAccountAccordingToAccountRule(rule);
+        //updateTransactionAccordingToNameRule(rule);
     }
 }
