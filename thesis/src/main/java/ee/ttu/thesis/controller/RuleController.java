@@ -18,6 +18,6 @@ public class RuleController {
     @ResponseBody
     public void insertNewRule(@RequestBody Rule rule){
         ruleService.insertNewRule(rule);
-        //transactionService.updateTransactionIncomeStatementTypesWithRule(rule);
+        transactionService.updateTransactionIncomeStatementTypesWithRule(rule);
     }
 }

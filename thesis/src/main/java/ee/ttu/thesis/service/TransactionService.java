@@ -80,8 +80,15 @@ public class TransactionService {
     }
 
     public void updateTransactionIncomeStatementTypesWithRule(Rule rule) {
-       // updateTransactionAccordingToDetailsRule(rule.getTransactionDetails());
+       if(rule.getTransactionDetails() != null) updateTransactionAccordingToDetailsRule(rule);
         //updateTransactionAccountAccordingToAccountRule(rule);
         //updateTransactionAccordingToNameRule(rule);
+    }
+
+    private void updateTransactionAccordingToDetailsRule(Rule rule) {
+        List<Transaction> transactions = repo.findAll();
+        for (Transaction t : transactions) {
+            if(t.getDetails().contains(rule.getTransactionDetails())) t.setIncomeStatementType(rule.getIncomeStatementType());
+        }
     }
 }

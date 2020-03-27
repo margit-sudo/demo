@@ -23,4 +23,5 @@ public class Rule {
     private String transactionBeneficiaryOrPayerAccount;
     private String transactionBeneficiaryOrPayerName;
     private String transactionDetails;
+    private IncomeStatementType incomeStatementType;
 }
