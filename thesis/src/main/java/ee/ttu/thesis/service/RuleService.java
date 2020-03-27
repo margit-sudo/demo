@@ -15,6 +15,8 @@ public class RuleService {
 
 
     public void insertNewRule(Rule rule) {
+        if(rule.getName() == null) rule.setName("Default");
+        rule.setIsAddedByUser(true);
         repo.save(rule);
     }
 }

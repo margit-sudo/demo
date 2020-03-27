@@ -24,4 +24,5 @@ public class Rule {
     private String transactionBeneficiaryOrPayerName;
     private String transactionDetails;
     private IncomeStatementType incomeStatementType;
+    private Boolean isAddedByUser;
 }

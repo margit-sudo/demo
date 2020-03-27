@@ -1,5 +1,6 @@
 package ee.ttu.thesis.service;
 
+import ee.ttu.thesis.domain.Entry;
 import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Rule;
 import ee.ttu.thesis.domain.Transaction;
@@ -14,16 +15,17 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
 public class TransactionService {
+
     @Autowired
     private TransactionRepository repo;
-    String csvFile = "C:\\Users\\birgi\\Documents\\Äriinfotehnoloogia\\lõputöö/marksu eng 2019.csv";
+    private String csvFile = "C:\\Users\\birgi\\Documents\\Äriinfotehnoloogia\\lõputöö/marksu eng 2019.csv";
+    @Autowired
+    private IncomeStatementTypeService incomeStatementTypeService;
 
     public void addTransactionsFromFile() throws IOException {
         List<Transaction> transactionsFromCvs = parseTransactionFileToList();
@@ -55,7 +57,8 @@ public class TransactionService {
                         debitOrCredit(currentLine[7]).
                         amount(new BigDecimal(currentLine[8].replace(",", "."))).
                         details(currentLine[11]).
-                        currency(currentLine[13]).build());
+                        currency(currentLine[13]).
+                        incomeStatementType(IncomeStatementType.MÄÄRAMATA).build());
             }
         } catch (IOException e) {
             throw new IOException("Cannot parse the file!");
@@ -80,15 +83,37 @@ public class TransactionService {
     }
 
     public void updateTransactionIncomeStatementTypesWithRule(Rule rule) {
-       if(rule.getTransactionDetails() != null) updateTransactionAccordingToDetailsRule(rule);
-        //updateTransactionAccountAccordingToAccountRule(rule);
-        //updateTransactionAccordingToNameRule(rule);
-    }
-
-    private void updateTransactionAccordingToDetailsRule(Rule rule) {
         List<Transaction> transactions = repo.findAll();
         for (Transaction t : transactions) {
-            if(t.getDetails().contains(rule.getTransactionDetails())) t.setIncomeStatementType(rule.getIncomeStatementType());
+            //details
+            if(rule.getTransactionDetails() != null && t.getDetails().contains(rule.getTransactionDetails())) t.setIncomeStatementType(rule.getIncomeStatementType());
+            //account
+            if(rule.getTransactionBeneficiaryOrPayerAccount() != null && t.getBeneficiaryOrPayerAccount().contains(rule.getTransactionBeneficiaryOrPayerAccount())) t.setIncomeStatementType(rule.getIncomeStatementType());
+            //name
+            if(rule.getTransactionBeneficiaryOrPayerName() != null && t.getBeneficiaryOrPayerName().contains(rule.getTransactionBeneficiaryOrPayerName())) t.setIncomeStatementType(rule.getIncomeStatementType());
         }
+    }
+
+    public HashMap<IncomeStatementType, Entry>  getTransactionsGroupedByIncomeStatementType(){
+        HashMap<IncomeStatementType, Entry> groupedList = new HashMap<>();
+        List<IncomeStatementType> incomeStatements = incomeStatementTypeService.getIncomeStatementTypes();
+
+        //add incomestatement to hashmap without transactions
+        for (IncomeStatementType incomeStatement : incomeStatements) {
+            groupedList.put(incomeStatement, new Entry(new ArrayList<>(), BigDecimal.valueOf(0)));
+        }
+
+        //then add each transaction according to the statement type aka key
+        List<Transaction> transactions = repo.findAll();
+
+        for (Transaction t : transactions) {
+                List<Transaction> list = groupedList.get(t.getIncomeStatementType()).getTransactions();
+                BigDecimal sum = groupedList.get(t.getIncomeStatementType()).getSum();
+                list.add(t);
+                sum = sum.add(t.getAmount());
+                groupedList.put(t.getIncomeStatementType(), new Entry(list, sum));
+        }
+
+        return groupedList;
     }
 }

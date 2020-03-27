@@ -28,5 +28,8 @@ public enum IncomeStatementType {
 
     //Aruandeaasta kasum (kahjum)
     EMAETTEVÕTJA_AKTSIONÄRIDE_VÕI_OSANIKE_OSA_KASUMIST,
-    VÄHEMUSOSALUSE_OSA_KASUMIST
+    VÄHEMUSOSALUSE_OSA_KASUMIST,
+
+    //Määramata
+    MÄÄRAMATA
 }
