@@ -26,9 +26,20 @@ public class ReportService {
         r.setDateMade(LocalDate.now());
 
         List<ReportRow> rows = createReportRows();
+        rows = removeZeroSums(rows);
         r.setRows(rows);
 
+        //repo.save(r);
+
         return r;
+    }
+
+    private List<ReportRow> removeZeroSums(List<ReportRow> rows) {
+        List<ReportRow> rowsWithoutZeroSum = new ArrayList<>();
+        for (ReportRow row : rows) {
+            if(row.getSum() != BigDecimal.ZERO) rowsWithoutZeroSum.add(row);
+        }
+        return rowsWithoutZeroSum;
     }
 
     private List<ReportRow>  createReportRows() {

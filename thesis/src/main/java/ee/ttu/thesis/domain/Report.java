@@ -24,7 +24,7 @@ public class Report {
     @OneToMany
     @JoinTable(name="reports",
             joinColumns = { @JoinColumn(name = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "reportrow_id") })
+            inverseJoinColumns = { @JoinColumn(name = "reportRow_id") })
     private List<ReportRow> rows;
 
     private LocalDate dateMade;
