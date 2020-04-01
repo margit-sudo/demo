@@ -10,9 +10,4 @@ import java.text.ParseException;
 @SpringBootTest
 class ThesisApplicationTests {
 
-	@Test
-	void contextLoads() throws IOException {
-		TransactionService s = new TransactionService();
-		s.parseCsvFileToTransaction();
-	}
 }

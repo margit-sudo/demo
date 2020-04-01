@@ -23,47 +23,15 @@ public class TransactionService {
 
     @Autowired
     private TransactionRepository repo;
-    private String csvFile = "C:\\Users\\birgi\\Documents\\Äriinfotehnoloogia\\lõputöö/marksu eng 2019.csv";
     @Autowired
     private IncomeStatementTypeService incomeStatementTypeService;
 
-    public void addTransactionsFromFile() throws IOException {
-        List<Transaction> transactionsFromCvs = parseTransactionFileToList();
-        for (Transaction t : transactionsFromCvs) {
-            repo.save(t);
-        }
+    public void saveAll(List<Transaction> list){
+       repo.saveAll(list);
     }
 
     public List<Transaction> getTransactionsList(){
         return repo.findAll();
-    }
-
-    private List<Transaction> parseTransactionFileToList() throws IOException {
-        String line = "";
-        List<Transaction> transactionList = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            String ignorefirstLine = br.readLine();
-
-            while ((line = br.readLine()) != null) {
-                line = line.replace("\"", "");
-                String[] currentLine = line.split(";");
-
-                transactionList.add(Transaction.builder().
-                        accountNumber(currentLine[0]).
-                        date(LocalDate.parse(currentLine[2], DateTimeFormatter.ofPattern("dd-MM-yyyy"))).
-                        beneficiaryOrPayerAccount(currentLine[3]).
-                        beneficiaryOrPayerName(currentLine[4]).
-                        debitOrCredit(currentLine[7]).
-                        amount(new BigDecimal(currentLine[8].replace(",", "."))).
-                        details(currentLine[11]).
-                        currency(currentLine[13]).
-                        incomeStatementType(IncomeStatementType.MÄÄRAMATA).build());
-            }
-        } catch (IOException e) {
-            throw new IOException("Cannot parse the file!");
-        }
-        return transactionList;
     }
 
     public void updateTransactionIncomeStatementTypes(List<Transaction> transactions) {
@@ -115,5 +83,9 @@ public class TransactionService {
         }
 
         return groupedList;
+    }
+
+    public void deleteTransaction(Long id) {
+        repo.deleteById(id);
     }
 }

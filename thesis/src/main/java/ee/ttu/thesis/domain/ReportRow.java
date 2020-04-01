@@ -23,8 +23,8 @@ import java.util.List;
         private BigDecimal sum;
 
     @OneToMany
-    @JoinTable(name="reportRow",
+  /*  @JoinTable(name="reportRow",
             joinColumns = { @JoinColumn(name = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "transaction_id") })
+            inverseJoinColumns = { @JoinColumn(name = "transactions_id") })*/
         private List<Transaction> transactions;
 }
