@@ -1,6 +1,5 @@
 package ee.ttu.thesis.controller;
 
-import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Rule;
 import ee.ttu.thesis.service.RuleService;
 import ee.ttu.thesis.service.TransactionService;

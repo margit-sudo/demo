@@ -1,12 +1,12 @@
 package ee.ttu.thesis.controller;
 
 import ee.ttu.thesis.domain.Report;
-import ee.ttu.thesis.domain.Rule;
 import ee.ttu.thesis.service.ReportService;
-import ee.ttu.thesis.service.RuleService;
-import ee.ttu.thesis.service.TransactionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/report")

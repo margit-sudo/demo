@@ -21,10 +21,7 @@ public class Report {
     @GeneratedValue
     private long id;
 
-    @OneToMany
-    @JoinTable(name="reports",
-            joinColumns = { @JoinColumn(name = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "reportRow_id") })
+    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
     private List<ReportRow> rows;
 
     private LocalDate dateMade;

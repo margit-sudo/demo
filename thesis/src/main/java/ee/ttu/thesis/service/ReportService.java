@@ -1,6 +1,9 @@
 package ee.ttu.thesis.service;
 
-import ee.ttu.thesis.domain.*;
+import ee.ttu.thesis.domain.Entry;
+import ee.ttu.thesis.domain.IncomeStatementType;
+import ee.ttu.thesis.domain.Report;
+import ee.ttu.thesis.domain.ReportRow;
 import ee.ttu.thesis.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

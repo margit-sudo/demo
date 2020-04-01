@@ -1,7 +1,6 @@
 package ee.ttu.thesis.service;
 
 import ee.ttu.thesis.domain.Rule;
-import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.repository.RuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

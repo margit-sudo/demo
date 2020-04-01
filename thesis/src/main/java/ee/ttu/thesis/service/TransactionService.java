@@ -9,13 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -26,8 +24,8 @@ public class TransactionService {
     @Autowired
     private IncomeStatementTypeService incomeStatementTypeService;
 
-    public void saveAll(List<Transaction> list){
-       repo.saveAll(list);
+    public List<Transaction> saveAll(List<Transaction> list){
+       return repo.saveAll(list);
     }
 
     public List<Transaction> getTransactionsList(){

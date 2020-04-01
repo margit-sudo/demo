@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Builder
 @Entity
-@Table(name = "reportRow")
+@Table(name = "reportrows")
 @AllArgsConstructor
 @NoArgsConstructor
     public class ReportRow {
@@ -20,11 +20,14 @@ import java.util.List;
     @GeneratedValue
         private Long id;
         private IncomeStatementType incomeStatementType;
+
+        @Column(name = "sumOfTransactions")
         private BigDecimal sum;
 
-    @OneToMany
-  /*  @JoinTable(name="reportRow",
-            joinColumns = { @JoinColumn(name = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "transactions_id") })*/
+    @OneToMany(mappedBy = "row", cascade = CascadeType.ALL)
         private List<Transaction> transactions;
+
+    @ManyToOne()
+    @JoinColumn(name = "report_id", referencedColumnName="id")
+    private  Report report;
 }

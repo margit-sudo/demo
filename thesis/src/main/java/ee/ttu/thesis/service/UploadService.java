@@ -3,14 +3,16 @@ package ee.ttu.thesis.service;
 import ee.ttu.thesis.domain.File;
 import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Transaction;
-import ee.ttu.thesis.repository.TransactionRepository;
 import ee.ttu.thesis.repository.UploadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,8 +37,8 @@ public class UploadService {
 
     public void parseAndSaveMultipartFile(MultipartFile file) throws IOException {
         List<Transaction> transactionList = parseTransactions(file);
-        transactionService.saveAll(transactionList);
-        transactionList = transactionService.getTransactionsList();
+        transactionList = transactionService.saveAll(transactionList);
+       // transactionList = transactionService.getTransactionsList();
         saveFile(File.builder().name(file.getName()).uploadDate(LocalDate.now()).transactions(transactionList).build());
     }
 
