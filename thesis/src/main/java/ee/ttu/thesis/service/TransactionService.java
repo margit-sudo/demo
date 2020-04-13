@@ -22,7 +22,7 @@ public class TransactionService {
     @Autowired
     private TransactionRepository repo;
     @Autowired
-    private IncomeStatementTypeService incomeStatementTypeService;
+    private EnumService enumService;
 
     public List<Transaction> saveAll(List<Transaction> list){
        return repo.saveAll(list);
@@ -62,7 +62,7 @@ public class TransactionService {
 
     public HashMap<IncomeStatementType, Entry>  getTransactionsGroupedByIncomeStatementType(){
         HashMap<IncomeStatementType, Entry> groupedList = new HashMap<>();
-        List<IncomeStatementType> incomeStatements = incomeStatementTypeService.getIncomeStatementTypes();
+        List<IncomeStatementType> incomeStatements = enumService.getIncomeStatementTypes();
 
         //add incomestatement to hashmap without transactions
         for (IncomeStatementType incomeStatement : incomeStatements) {
