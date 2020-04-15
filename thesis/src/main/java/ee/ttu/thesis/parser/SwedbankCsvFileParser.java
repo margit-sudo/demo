@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SwedbankCsvFileParser implements ICsvFileParser {
+public class SwedbankCsvFileParser implements CsvFileParser {
 
     @Override
     public List<Transaction>  parseCsvFile(MultipartFile file) throws IOException {

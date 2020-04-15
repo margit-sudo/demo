@@ -5,6 +5,7 @@ import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Report;
 import ee.ttu.thesis.domain.ReportRow;
 import ee.ttu.thesis.repository.ReportRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,11 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ReportService {
 
-    @Autowired
-    private ReportRepository repo;
-    @Autowired
-    private TransactionService transactionService;
+    private final ReportRepository repo;
+    private final TransactionService transactionService;
 
     public Report createReport(){
         Report r = new Report();

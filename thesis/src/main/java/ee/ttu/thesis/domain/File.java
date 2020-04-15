@@ -16,11 +16,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class File {
-
     @Id
     @GeneratedValue
     private Long id;
+
     private LocalDate uploadDate;
+
     private String name;
 
     @OneToMany(
@@ -28,4 +29,8 @@ public class File {
             orphanRemoval = true
     )
     private List<Transaction> transactions;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

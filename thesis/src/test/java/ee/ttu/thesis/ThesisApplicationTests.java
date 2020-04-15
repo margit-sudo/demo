@@ -12,8 +12,8 @@ import java.io.IOException;
 class ThesisApplicationTests {
 
     @Test
-    public void testParse() throws IOException, SAXException, ParserConfigurationException {
+    public void testParse() throws IOException {
         XmlParser parser = new XmlParser();
-        parser.parseFile();
+        //parser.parseFile(file);
     }
 }

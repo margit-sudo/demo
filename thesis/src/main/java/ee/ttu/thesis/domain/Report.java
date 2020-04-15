@@ -16,13 +16,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Report {
-
     @Id
     @GeneratedValue
     private long id;
 
-    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReportRow> rows;
 
+    private LocalDate startDate;
+
     private LocalDate dateMade;
+
+    private LocalDate endDate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

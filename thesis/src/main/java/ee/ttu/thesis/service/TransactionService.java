@@ -5,6 +5,7 @@ import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Rule;
 import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.repository.TransactionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,11 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TransactionService {
 
-    @Autowired
-    private TransactionRepository repo;
-    @Autowired
-    private EnumService enumService;
+    private final TransactionRepository repo;
+    private final EnumService enumService;
 
     public List<Transaction> saveAll(List<Transaction> list){
        return repo.saveAll(list);

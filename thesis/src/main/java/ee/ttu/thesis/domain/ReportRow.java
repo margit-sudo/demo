@@ -15,19 +15,19 @@ import java.util.List;
 @Table(name = "reportrows")
 @AllArgsConstructor
 @NoArgsConstructor
-    public class ReportRow {
+public class ReportRow {
     @Id
     @GeneratedValue
-        private Long id;
-        private IncomeStatementType incomeStatementType;
+    private Long id;
+    private IncomeStatementType incomeStatementType;
 
-        @Column(name = "sumOfTransactions")
-        private BigDecimal sum;
+    @Column(name = "sumOfTransactions")
+    private BigDecimal sum;
 
     @OneToMany(mappedBy = "row", cascade = CascadeType.ALL)
-        private List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     @ManyToOne()
-    @JoinColumn(name = "report_id", referencedColumnName="id")
-    private  Report report;
+    @JoinColumn(name = "report_id", referencedColumnName = "id")
+    private Report report;
 }

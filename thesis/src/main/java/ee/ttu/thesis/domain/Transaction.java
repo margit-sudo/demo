@@ -35,4 +35,8 @@ public class Transaction {
     @ManyToOne()
     @JoinColumn(name = "report_row_id", referencedColumnName="id")
     private ReportRow row;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

@@ -44,3 +44,14 @@ CREATE TABLE rules (
                               incomeStatementType VARCHAR(255),
                               isAddedByUser boolean
 );
+CREATE TABLE users (
+                       id BIGINT NOT NULL PRIMARY KEY,
+                       username VARCHAR(255),
+                       password VARCHAR(255),
+                       email VARCHAR(255),
+                       role_id VARCHAR(255)
+);
+CREATE TABLE roles (
+                       id BIGINT NOT NULL PRIMARY KEY,
+                       name VARCHAR(255)
+);

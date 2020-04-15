@@ -2,6 +2,7 @@ package ee.ttu.thesis.service;
 
 import ee.ttu.thesis.domain.Rule;
 import ee.ttu.thesis.repository.RuleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,10 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class RuleService {
-    @Autowired
-    private RuleRepository repo;
 
+    private final RuleRepository repo;
 
     public void insertNewRule(Rule rule) {
         if(rule.getName() == null) rule.setName("Default");

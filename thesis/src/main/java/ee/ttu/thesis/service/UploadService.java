@@ -1,10 +1,12 @@
 package ee.ttu.thesis.service;
 
 import ee.ttu.thesis.domain.File;
+import ee.ttu.thesis.domain.FileType;
 import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.parser.SwedbankCsvFileParser;
 import ee.ttu.thesis.parser.XmlParser;
 import ee.ttu.thesis.repository.UploadRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,11 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UploadService {
-    @Autowired
-    private UploadRepository repo;
-    @Autowired
-    private TransactionService transactionService;
+
+    private final UploadRepository repo;
+    private final TransactionService transactionService;
 
     public List<File> getFilesList() {
         return repo.findAll();
@@ -43,11 +45,11 @@ public class UploadService {
         List<Transaction> list = new ArrayList<>();
         String fileName = file.getOriginalFilename();
 
-        if(FilenameUtils.getExtension(fileName).equals("xml")){
+        if(FilenameUtils.getExtension(fileName).equals(FileType.XML)){
             XmlParser p = new XmlParser();
-            list = p.parseFile();
+            list = p.parseFile(file);
         }
-        else if(FilenameUtils.getExtension(fileName).equals("csv")){
+        else if(FilenameUtils.getExtension(fileName).equals(FileType.CSV)){
             SwedbankCsvFileParser parser = new SwedbankCsvFileParser();
             list =  parser.parseCsvFile(file);
         }
