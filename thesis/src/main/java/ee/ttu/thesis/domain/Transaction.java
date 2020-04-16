@@ -32,10 +32,6 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private IncomeStatementType incomeStatementType;
 
-    @ManyToOne()
-    @JoinColumn(name = "report_row_id", referencedColumnName="id")
-    private ReportRow row;
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

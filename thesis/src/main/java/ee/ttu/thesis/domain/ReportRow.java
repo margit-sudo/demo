@@ -24,10 +24,10 @@ public class ReportRow {
     @Column(name = "sumOfTransactions")
     private BigDecimal sum;
 
-    @OneToMany(mappedBy = "row", cascade = CascadeType.ALL)
+    @OneToMany
     private List<Transaction> transactions;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "report_id", referencedColumnName = "id")
     private Report report;
 }

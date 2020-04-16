@@ -3,7 +3,6 @@ package ee.ttu.thesis.security;
 import ee.ttu.thesis.security.jwt.AuthEntryPointJwt;
 import ee.ttu.thesis.security.jwt.AuthTokenFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,9 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
+                .antMatchers("/api/**").permitAll()
+                .antMatchers("/h2/**").permitAll()
                 .anyRequest().authenticated();
 
+        http.headers().frameOptions().disable();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

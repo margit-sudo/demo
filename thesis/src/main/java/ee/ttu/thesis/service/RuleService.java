@@ -3,7 +3,6 @@ package ee.ttu.thesis.service;
 import ee.ttu.thesis.domain.Rule;
 import ee.ttu.thesis.repository.RuleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
