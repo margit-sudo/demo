@@ -1,12 +1,14 @@
 package ee.ttu.thesis.service;
 
 import ee.ttu.thesis.domain.Rule;
+import ee.ttu.thesis.domain.User;
 import ee.ttu.thesis.repository.RuleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,5 +29,9 @@ public class RuleService {
 
     public void deleteRule(Long id) {
         repo.deleteById(id);
+    }
+
+    public List<Rule> getRuleListByUser(Long userId) {
+        return repo.findByUserId(userId);
     }
 }

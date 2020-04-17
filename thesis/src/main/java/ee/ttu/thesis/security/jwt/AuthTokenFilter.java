@@ -21,9 +21,9 @@ import java.io.IOException;
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    private  JwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
     @Autowired
-    private  UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
@@ -55,7 +55,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7, headerAuth.length());
         }
+        return null;
+    }
 
+    public String getUserFromToken(HttpServletRequest request) {
+        String jwt = parseJwt(request);
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            return jwtUtils.getUserIdFromJwtToken(jwt);
+        }
         return null;
     }
 }

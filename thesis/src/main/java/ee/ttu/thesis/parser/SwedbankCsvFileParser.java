@@ -2,6 +2,7 @@ package ee.ttu.thesis.parser;
 
 import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Transaction;
+import ee.ttu.thesis.domain.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -17,7 +18,7 @@ import java.util.List;
 public class SwedbankCsvFileParser implements CsvFileParser {
 
     @Override
-    public List<Transaction>  parseCsvFile(MultipartFile file) throws IOException {
+    public List<Transaction>  parseCsvFile(MultipartFile file, User user) throws IOException {
         String line;
         List<Transaction> transactionList = new ArrayList<>();
 
@@ -39,7 +40,8 @@ public class SwedbankCsvFileParser implements CsvFileParser {
                                 amount(new BigDecimal(currentLine[8].replace(",", "."))).
                                 details(currentLine[11]).
                                 currency(currentLine[13]).
-                                incomeStatementType(IncomeStatementType.MÄÄRAMATA).build());
+                                incomeStatementType(IncomeStatementType.MÄÄRAMATA).
+                                user(user).build());
             }
         } catch (IOException e) {
             throw new IOException("Cannot parse the file!");

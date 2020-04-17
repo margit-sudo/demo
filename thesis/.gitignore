@@ -30,3 +30,14 @@ out/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/
+/.gitignore
+/build.gradle
+/test.lck
+/test.log
+/test.properties
+/test.script
+/src/main/resources/application.properties.lck
+/src/main/resources/application.properties.log
+/src/main/resources/application.properties.properties
+/src/main/resources/application.properties.script

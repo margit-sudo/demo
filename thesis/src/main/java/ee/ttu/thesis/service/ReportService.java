@@ -23,7 +23,7 @@ public class ReportService {
     private final ReportRepository repo;
     private final TransactionService transactionService;
 
-    public Report createReport(){
+    public Report createReportByUser(Long userId){
         Report r = new Report();
         r.setDateMade(LocalDate.now());
 

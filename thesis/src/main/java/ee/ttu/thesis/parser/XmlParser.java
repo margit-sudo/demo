@@ -1,6 +1,7 @@
 package ee.ttu.thesis.parser;
 
 import ee.ttu.thesis.domain.Transaction;
+import ee.ttu.thesis.domain.User;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,9 +22,7 @@ import java.util.List;
 
 public class XmlParser {
 
-    public List<Transaction> parseFile(MultipartFile file) throws IOException {
-        //String file = "C:\\Users\\birgi\\Documents\\Äriinfotehnoloogia\\lõputöö\\CVS failid jne\\2019 full xml.xml";
-       // File xmlFile = new File(String.valueOf(file));
+    public List<Transaction> parseFile(MultipartFile file, User user) throws IOException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         List<Transaction> transactions = new ArrayList<>();
@@ -37,11 +36,7 @@ public class XmlParser {
             NodeList nodeList = doc.getElementsByTagName("Ntry");
 
             for (int i = 0; i < nodeList.getLength(); i++) {
-                transactions.add(getTransaction(nodeList.item(i)));
-            }
-            //DEBUG
-            for (Transaction t : transactions) {
-                System.out.println(t.toString());
+                transactions.add(getTransaction(nodeList.item(i), user));
             }
         } catch (SAXException | ParserConfigurationException | IOException e) {
             e.printStackTrace();
@@ -61,7 +56,7 @@ public class XmlParser {
     }
 
 
-    private static Transaction getTransaction(Node node) {
+    private static Transaction getTransaction(Node node, User u) {
         Transaction t = new Transaction();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
@@ -70,6 +65,7 @@ public class XmlParser {
             t.setDate(LocalDate.parse((getTagValue("Dt", element)), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             t.setBeneficiaryOrPayerAccount(getTagValue("IBAN", element));
             t.setBeneficiaryOrPayerName(getTagValue("Nm", element));
+            t.setUser(u);
 
             if(t.getDebitOrCredit().equals("CRDT"))   t.setAmount(new BigDecimal(getTagValue("Amt", element)));
             else t.setAmount(new BigDecimal(getTagValue("Amt", element)).multiply(new BigDecimal(-1)));
