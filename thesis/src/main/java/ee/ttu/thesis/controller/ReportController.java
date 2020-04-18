@@ -14,15 +14,15 @@ public class ReportController {
     private final ReportService reportService;
     private final UserService userService;
 
- /*   @GetMapping("/new")
+    @PostMapping("/get")
     @ResponseBody
-    public Report getReport() {
-        return reportService.createReportByUser();
-    }*/
+    public Report getReportByUser(@RequestHeader(name = "Authorization") String token, @RequestBody Report r) {
+        return reportService.createReportByUser(userService.getUserIdFromToken(token), r);
+    }
 
-    @GetMapping("/get")
+    @GetMapping("/get/{id}")
     @ResponseBody
-    public Report getReportByUser(@RequestHeader(name = "Authorization") String token) {
-        return reportService.createReportByUser(userService.getUserIdFromToken(token));
+    public Report getReportByUser(@PathVariable("id") Long id) {
+        return reportService.getReportById(id);
     }
 }

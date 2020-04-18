@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,14 +32,8 @@ public class TransactionService {
         return repo.findAll();
     }
 
-    public void updateTransactionIncomeStatementTypes(List<Transaction> transactions) {
-        for (Transaction t : transactions) {
-            Optional<Transaction> dbTransaction = repo.findById(t.getId());
-            dbTransaction.ifPresent(transaction -> {
-                    transaction = Transaction.class.cast(dbTransaction);
-                    transaction.setIncomeStatementType(t.getIncomeStatementType());
-                    });
-        }
+    public List<Transaction> getTransactionsByUserId(Long userId){
+        return repo.findByUserId(userId);
     }
 
     public Optional<Transaction> updateOneTransactionIncomeStatementType(Long id, IncomeStatementType type) {
@@ -59,7 +54,7 @@ public class TransactionService {
         }
     }
 
-    public HashMap<IncomeStatementType, Entry>  getTransactionsGroupedByIncomeStatementType(){
+    public HashMap<IncomeStatementType, Entry>  getTransactionsGroupedByIncomeStatementType(Long userId, LocalDate startDate, LocalDate endDate){
         HashMap<IncomeStatementType, Entry> groupedList = new HashMap<>();
         List<IncomeStatementType> incomeStatements = enumService.getIncomeStatementTypes();
 
@@ -69,7 +64,10 @@ public class TransactionService {
         }
 
         //then add each transaction according to the statement type aka key
-        List<Transaction> transactions = repo.findAll();
+        List<Transaction> transactions = repo.findByUserIdAndDateBetween(userId, startDate, endDate);
+        //repo.findByUserId(userId);
+       /* List<Transaction> transactionsByDates = repo.findByDateBetween(startDate, endDate);
+        transactions.retainAll(transactionsByDates);*/
 
         for (Transaction t : transactions) {
                 List<Transaction> list = groupedList.get(t.getIncomeStatementType()).getTransactions();

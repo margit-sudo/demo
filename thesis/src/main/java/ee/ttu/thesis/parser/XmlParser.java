@@ -1,5 +1,6 @@
 package ee.ttu.thesis.parser;
 
+import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.domain.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,8 +50,7 @@ public class XmlParser {
             NodeList nodeList = element.getElementsByTagName(tag).item(0).getChildNodes();
             Node node = nodeList.item(0);
             return node.getNodeValue();
-        }
-        catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             return null;
         }
     }
@@ -60,16 +60,27 @@ public class XmlParser {
         Transaction t = new Transaction();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            t.setDetails(getTagValue("Ustrd", element));
-            t.setDebitOrCredit(getTagValue("CdtDbtInd", element));
-            t.setDate(LocalDate.parse((getTagValue("Dt", element)), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-            t.setBeneficiaryOrPayerAccount(getTagValue("IBAN", element));
-            t.setBeneficiaryOrPayerName(getTagValue("Nm", element));
-            t.setUser(u);
+            t = Transaction.builder().
+                    details(getTagValue("Ustrd", element)).
+                    debitOrCredit(getTagValue("CdtDbtInd", element)).
+                    date(LocalDate.parse((getTagValue("Dt", element)), DateTimeFormatter.ofPattern("yyyy-MM-dd"))).
+                    beneficiaryOrPayerAccount(getTagValue("IBAN", element)).
+                    beneficiaryOrPayerName(getTagValue("Nm", element)).
+                    user(u).
+                    incomeStatementType(IncomeStatementType.MÄÄRAMATA).
+                    currency(getTagAttributeValue("Amt", "Ccy", element)).build();
 
-            if(t.getDebitOrCredit().equals("CRDT"))   t.setAmount(new BigDecimal(getTagValue("Amt", element)));
+            if (t.getDebitOrCredit().equals("CRDT")) t.setAmount(new BigDecimal(getTagValue("Amt", element)));
             else t.setAmount(new BigDecimal(getTagValue("Amt", element)).multiply(new BigDecimal(-1)));
         }
         return t;
+    }
+
+    private static String getTagAttributeValue(String tag, String attribute, Element element) {
+        try {
+            return element.getElementsByTagName(tag).item(0).getAttributes().getNamedItem(attribute).getNodeValue();
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 }

@@ -28,6 +28,6 @@ public class UserService {
 
     public User getUserFromToken(String token){
         Optional<User> u = getUserByUsername(jwtUtils.getUserNameFromJwtToken(token));
-        return u.map(user -> user).orElse(null);
+        return u.orElse(null);
     }
 }

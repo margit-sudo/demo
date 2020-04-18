@@ -48,11 +48,11 @@ public class UploadService {
         List<Transaction> list = new ArrayList<>();
         String fileName = file.getOriginalFilename();
 
-        if(FilenameUtils.getExtension(fileName).equals(FileType.XML)){
+        if(FilenameUtils.getExtension(fileName).equals("xml")){
             XmlParser p = new XmlParser();
             list = p.parseFile(file, user);
         }
-        else if(FilenameUtils.getExtension(fileName).equals(FileType.CSV)){
+        else if(FilenameUtils.getExtension(fileName).equals("csv")){
             SwedbankCsvFileParser parser = new SwedbankCsvFileParser();
             list =  parser.parseCsvFile(file, user);
         }

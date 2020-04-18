@@ -24,7 +24,8 @@ public class ReportRow {
     @Column(name = "sumOfTransactions")
     private BigDecimal sum;
 
-    @OneToMany
+    @ManyToMany
+    @JoinColumn(name = "transaction_id", referencedColumnName = "id")
     private List<Transaction> transactions;
 
     @ManyToOne

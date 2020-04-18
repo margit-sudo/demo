@@ -5,7 +5,9 @@ import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Report;
 import ee.ttu.thesis.domain.ReportRow;
 import ee.ttu.thesis.repository.ReportRepository;
+import ee.ttu.thesis.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,17 +24,23 @@ public class ReportService {
 
     private final ReportRepository repo;
     private final TransactionService transactionService;
+    private final UserRepository userRepo;
 
-    public Report createReportByUser(Long userId){
-        Report r = new Report();
-        r.setDateMade(LocalDate.now());
+    public Report createReportByUser(Long userId, Report reportFromFront){
+        LocalDate startDate = reportFromFront.getStartDate();
+        LocalDate endDate = reportFromFront.getEndDate();
 
-        List<ReportRow> rows = createReportRows();
+        List<ReportRow> rows = createReportRows(userId, startDate, endDate);
         rows = removeZeroSums(rows);
-        r.setRows(rows);
 
-        //repo.save(r);
+        Report r = Report.builder().
+                user(userRepo.findById(userId).orElse(null)).
+                startDate(startDate).
+                endDate(endDate).
+                dateMade(LocalDate.now()).
+                rows(rows).build();
 
+        repo.save(r);
         return r;
     }
 
@@ -44,8 +52,8 @@ public class ReportService {
         return rowsWithoutZeroSum;
     }
 
-    private List<ReportRow>  createReportRows() {
-        HashMap<IncomeStatementType, Entry> groupedList = transactionService.getTransactionsGroupedByIncomeStatementType();
+    private List<ReportRow> createReportRows(Long userId, LocalDate startDate, LocalDate endDate) {
+        HashMap<IncomeStatementType, Entry> groupedList = transactionService.getTransactionsGroupedByIncomeStatementType(userId, startDate, endDate);
         List<ReportRow> rows = new ArrayList<>();
 
         for (IncomeStatementType incomeStatementType : groupedList.keySet()) {
@@ -58,4 +66,7 @@ public class ReportService {
         return rows;
     }
 
+    public Report getReportById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
 }
