@@ -1,6 +1,7 @@
 package ee.ttu.thesis.controller;
 
 import ee.ttu.thesis.domain.File;
+import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.service.UploadService;
 import ee.ttu.thesis.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,10 @@ public class UploadController {
     @PostMapping("/save")
     public void saveFile(@RequestParam(value = "file") MultipartFile file, @RequestHeader(name = "Authorization") String token) throws IOException {
         uploadService.parseAndSaveMultipartFile(file, userService.getUserFromToken(token));
+    }
+
+    @PostMapping("/anon/save")
+    public List<Transaction> saveFile(@RequestParam(value = "file") MultipartFile file) throws IOException {
+       return uploadService.parseMultiPartFileForAnon(file);
     }
 }

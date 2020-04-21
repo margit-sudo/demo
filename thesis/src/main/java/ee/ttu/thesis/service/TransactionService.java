@@ -1,9 +1,6 @@
 package ee.ttu.thesis.service;
 
-import ee.ttu.thesis.domain.Entry;
-import ee.ttu.thesis.domain.IncomeStatementType;
-import ee.ttu.thesis.domain.Rule;
-import ee.ttu.thesis.domain.Transaction;
+import ee.ttu.thesis.domain.*;
 import ee.ttu.thesis.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,15 +21,15 @@ public class TransactionService {
     private final TransactionRepository repo;
     private final EnumService enumService;
 
-    public List<Transaction> saveAll(List<Transaction> list){
-       return repo.saveAll(list);
+    public List<Transaction> saveAll(List<Transaction> list) {
+        return repo.saveAll(list);
     }
 
-    public List<Transaction> getTransactionsList(){
+    public List<Transaction> getTransactionsList() {
         return repo.findAll();
     }
 
-    public List<Transaction> getTransactionsByUserId(Long userId){
+    public List<Transaction> getTransactionsByUserId(Long userId) {
         return repo.findByUserId(userId);
     }
 
@@ -42,19 +39,69 @@ public class TransactionService {
         return repo.findById(id);
     }
 
-    public void updateTransactionIncomeStatementTypesWithRule(Rule rule) {
-        List<Transaction> transactions = repo.findAll();
-        for (Transaction t : transactions) {
-            //details
-            if(rule.getTransactionDetails() != null && t.getDetails().contains(rule.getTransactionDetails())) t.setIncomeStatementType(rule.getIncomeStatementType());
-            //account
-            if(rule.getTransactionBeneficiaryOrPayerAccount() != null && t.getBeneficiaryOrPayerAccount().contains(rule.getTransactionBeneficiaryOrPayerAccount())) t.setIncomeStatementType(rule.getIncomeStatementType());
-            //name
-            if(rule.getTransactionBeneficiaryOrPayerName() != null && t.getBeneficiaryOrPayerName().contains(rule.getTransactionBeneficiaryOrPayerName())) t.setIncomeStatementType(rule.getIncomeStatementType());
+    public void updateTransactionIncomeStatementTypesWithRule(Rule rule, User u) {
+        List<Transaction> transactions = repo.findByUserId(u.getId());
+        if (rule.getType().equals("Contains")) {
+            updateTransactionsWithContainsRule(transactions, rule);
+        } else if (rule.getType().equals("Begins")) {
+            updateTransactionsWithBeginsRule(transactions, rule);
+        } else if (rule.getType().equals("Ends")) {
+            updateTransactionsWithEndsRule(transactions, rule);
         }
     }
 
-    public HashMap<IncomeStatementType, Entry>  getTransactionsGroupedByIncomeStatementType(Long userId, LocalDate startDate, LocalDate endDate){
+    private void updateTransactionsWithContainsRule(List<Transaction> transactions, Rule rule) {
+        for (Transaction t : transactions) {
+            if (rule.getTransactionDetails() != null && t.getDetails() != null &&
+                    t.getDetails().contains(rule.getTransactionDetails())) {
+                t.setIncomeStatementType(rule.getIncomeStatementType());
+            }
+            if (rule.getTransactionBeneficiaryOrPayerAccount() != null && t.getBeneficiaryOrPayerAccount() != null &&
+                    t.getBeneficiaryOrPayerAccount().contains(rule.getTransactionBeneficiaryOrPayerAccount())) {
+                t.setIncomeStatementType(rule.getIncomeStatementType());
+            }
+            if (rule.getTransactionBeneficiaryOrPayerName() != null && t.getBeneficiaryOrPayerName() != null &&
+                    t.getBeneficiaryOrPayerName().contains(rule.getTransactionBeneficiaryOrPayerName())) {
+                t.setIncomeStatementType(rule.getIncomeStatementType());
+            }
+        }
+    }
+
+    private void updateTransactionsWithBeginsRule(List<Transaction> transactions, Rule rule) {
+        for (Transaction t : transactions) {
+            if (rule.getTransactionDetails() != null && t.getDetails() != null &&
+                    t.getDetails().startsWith(rule.getTransactionDetails())) {
+                t.setIncomeStatementType(rule.getIncomeStatementType());
+            }
+            if (rule.getTransactionBeneficiaryOrPayerAccount() != null && t.getBeneficiaryOrPayerAccount() != null &&
+                    t.getBeneficiaryOrPayerAccount().startsWith(rule.getTransactionBeneficiaryOrPayerAccount())) {
+                t.setIncomeStatementType(rule.getIncomeStatementType());
+            }
+            if (rule.getTransactionBeneficiaryOrPayerName() != null && t.getBeneficiaryOrPayerName() != null &&
+                    t.getBeneficiaryOrPayerName().startsWith(rule.getTransactionBeneficiaryOrPayerName())) {
+                t.setIncomeStatementType(rule.getIncomeStatementType());
+            }
+        }
+    }
+
+    private void updateTransactionsWithEndsRule(List<Transaction> transactions, Rule rule) {
+        for (Transaction t : transactions) {
+            if (rule.getTransactionDetails() != null && t.getDetails() != null &&
+                    t.getDetails().endsWith(rule.getTransactionDetails())) {
+                t.setIncomeStatementType(rule.getIncomeStatementType());
+            }
+            if (rule.getTransactionBeneficiaryOrPayerAccount() != null && t.getBeneficiaryOrPayerAccount() != null &&
+                    t.getBeneficiaryOrPayerAccount().endsWith(rule.getTransactionBeneficiaryOrPayerAccount())) {
+                t.setIncomeStatementType(rule.getIncomeStatementType());
+            }
+            if (rule.getTransactionBeneficiaryOrPayerName() != null && t.getBeneficiaryOrPayerName() != null &&
+                    t.getBeneficiaryOrPayerName().endsWith(rule.getTransactionBeneficiaryOrPayerName())) {
+                t.setIncomeStatementType(rule.getIncomeStatementType());
+            }
+        }
+    }
+
+    public HashMap<IncomeStatementType, Entry> getGroupedTransactions(Long userId, LocalDate startDate, LocalDate endDate, List<Transaction> transactionsFromAnon) {
         HashMap<IncomeStatementType, Entry> groupedList = new HashMap<>();
         List<IncomeStatementType> incomeStatements = enumService.getIncomeStatementTypes();
 
@@ -64,17 +111,16 @@ public class TransactionService {
         }
 
         //then add each transaction according to the statement type aka key
-        List<Transaction> transactions = repo.findByUserIdAndDateBetween(userId, startDate, endDate);
-        //repo.findByUserId(userId);
-       /* List<Transaction> transactionsByDates = repo.findByDateBetween(startDate, endDate);
-        transactions.retainAll(transactionsByDates);*/
+        List<Transaction> transactions = new ArrayList<>();
+              if(userId != null)  repo.findByUserIdAndDateBetween(userId, startDate, endDate);
+              else transactions = transactionsFromAnon;
 
         for (Transaction t : transactions) {
-                List<Transaction> list = groupedList.get(t.getIncomeStatementType()).getTransactions();
-                BigDecimal sum = groupedList.get(t.getIncomeStatementType()).getSum();
-                list.add(t);
-                sum = sum.add(t.getAmount());
-                groupedList.put(t.getIncomeStatementType(), new Entry(list, sum));
+            List<Transaction> list = groupedList.get(t.getIncomeStatementType()).getTransactions();
+            BigDecimal sum = groupedList.get(t.getIncomeStatementType()).getSum();
+            list.add(t);
+            sum = sum.add(t.getAmount());
+            groupedList.put(t.getIncomeStatementType(), new Entry(list, sum));
         }
 
         return groupedList;

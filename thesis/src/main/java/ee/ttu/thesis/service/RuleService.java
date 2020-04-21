@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -17,8 +16,9 @@ public class RuleService {
 
     private final RuleRepository repo;
 
-    public void insertNewRule(Rule rule) {
+    public void insertNewRule(Rule rule, User u) {
         if(rule.getName() == null) rule.setName("Default");
+        rule.setUser(u);
         rule.setIsAddedByUser(true);
         repo.save(rule);
     }

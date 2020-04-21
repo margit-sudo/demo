@@ -1,11 +1,9 @@
 package ee.ttu.thesis.repository;
 
 import ee.ttu.thesis.domain.Rule;
-import ee.ttu.thesis.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface RuleRepository  extends JpaRepository<Rule, Long> {
     List<Rule> findByUserId(Long userId);

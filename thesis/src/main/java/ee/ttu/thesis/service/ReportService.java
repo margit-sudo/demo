@@ -1,13 +1,9 @@
 package ee.ttu.thesis.service;
 
-import ee.ttu.thesis.domain.Entry;
-import ee.ttu.thesis.domain.IncomeStatementType;
-import ee.ttu.thesis.domain.Report;
-import ee.ttu.thesis.domain.ReportRow;
+import ee.ttu.thesis.domain.*;
 import ee.ttu.thesis.repository.ReportRepository;
 import ee.ttu.thesis.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,7 +26,7 @@ public class ReportService {
         LocalDate startDate = reportFromFront.getStartDate();
         LocalDate endDate = reportFromFront.getEndDate();
 
-        List<ReportRow> rows = createReportRows(userId, startDate, endDate);
+        List<ReportRow> rows = createReportRows(userId, startDate, endDate, null);
         rows = removeZeroSums(rows);
 
         Report r = Report.builder().
@@ -52,8 +48,8 @@ public class ReportService {
         return rowsWithoutZeroSum;
     }
 
-    private List<ReportRow> createReportRows(Long userId, LocalDate startDate, LocalDate endDate) {
-        HashMap<IncomeStatementType, Entry> groupedList = transactionService.getTransactionsGroupedByIncomeStatementType(userId, startDate, endDate);
+    private List<ReportRow> createReportRows(Long userId, LocalDate startDate, LocalDate endDate, List<Transaction> transactionsFromAnon) {
+        HashMap<IncomeStatementType, Entry> groupedList = transactionService.getGroupedTransactions(userId, startDate, endDate, transactionsFromAnon);
         List<ReportRow> rows = new ArrayList<>();
 
         for (IncomeStatementType incomeStatementType : groupedList.keySet()) {
@@ -68,5 +64,16 @@ public class ReportService {
 
     public Report getReportById(Long id) {
         return repo.findById(id).orElse(null);
+    }
+
+    public Report createReportForAnon(List<Transaction> transactions) {
+        List<ReportRow> rows = createReportRows(null, null, null, transactions);
+        rows = removeZeroSums(rows);
+
+        Report r = Report.builder().
+                dateMade(LocalDate.now()).
+                rows(rows).build();
+
+        return r;
     }
 }

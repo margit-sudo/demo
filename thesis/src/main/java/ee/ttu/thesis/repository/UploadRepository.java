@@ -1,7 +1,6 @@
 package ee.ttu.thesis.repository;
 
 import ee.ttu.thesis.domain.File;
-import ee.ttu.thesis.domain.Rule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

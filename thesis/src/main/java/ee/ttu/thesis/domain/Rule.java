@@ -19,20 +19,14 @@ public class Rule {
     @Id
     @GeneratedValue
     private Long id;
-
     private String name;
-
     private LocalDate dateMade;
-
     private String transactionBeneficiaryOrPayerAccount;
-
     private String transactionBeneficiaryOrPayerName;
-
     private String transactionDetails;
-
     private IncomeStatementType incomeStatementType;
-
     private Boolean isAddedByUser;
+    private String type;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

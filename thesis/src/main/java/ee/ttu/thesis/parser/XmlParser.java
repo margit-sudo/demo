@@ -23,7 +23,7 @@ import java.util.List;
 
 public class XmlParser {
 
-    public List<Transaction> parseFile(MultipartFile file, User user) throws IOException {
+    public List<Transaction> parseFile(MultipartFile file, User user) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         List<Transaction> transactions = new ArrayList<>();

@@ -1,7 +1,6 @@
 package ee.ttu.thesis.service;
 
 import ee.ttu.thesis.domain.File;
-import ee.ttu.thesis.domain.FileType;
 import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.domain.User;
 import ee.ttu.thesis.parser.SwedbankCsvFileParser;
@@ -57,5 +56,9 @@ public class UploadService {
             list =  parser.parseCsvFile(file, user);
         }
         return list;
+    }
+
+    public List<Transaction> parseMultiPartFileForAnon(MultipartFile file) throws IOException {
+        return parseTransactions(file, null);
     }
 }

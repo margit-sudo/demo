@@ -1,10 +1,13 @@
 package ee.ttu.thesis.controller;
 
 import ee.ttu.thesis.domain.Report;
+import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.service.ReportService;
 import ee.ttu.thesis.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/report")
@@ -24,5 +27,10 @@ public class ReportController {
     @ResponseBody
     public Report getReportByUser(@PathVariable("id") Long id) {
         return reportService.getReportById(id);
+    }
+
+    @PostMapping("/generate/anon")
+    public Report getReportByAnon(@RequestBody List<Transaction> transactions) {
+        return reportService.createReportForAnon(transactions);
     }
 }
