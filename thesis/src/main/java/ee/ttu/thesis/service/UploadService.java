@@ -40,7 +40,7 @@ public class UploadService {
     public void parseAndSaveMultipartFile(MultipartFile file, User user) throws IOException {
         List<Transaction> transactionList = parseTransactions(file, user);
         transactionList = transactionService.saveAll(transactionList);
-        saveFile(File.builder().name(file.getName()).uploadDate(LocalDate.now()).transactions(transactionList).build());
+        saveFile(File.builder().name(file.getOriginalFilename()).uploadDate(LocalDate.now()).user(user).transactions(transactionList).build());
     }
 
     private List<Transaction> parseTransactions(MultipartFile file, User user) throws IOException {
@@ -60,5 +60,9 @@ public class UploadService {
 
     public List<Transaction> parseMultiPartFileForAnon(MultipartFile file) throws IOException {
         return parseTransactions(file, null);
+    }
+
+    public void deleteFile(Long id) {
+        repo.deleteById(id);
     }
 }

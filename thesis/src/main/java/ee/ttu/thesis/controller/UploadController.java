@@ -29,6 +29,11 @@ public class UploadController {
         uploadService.parseAndSaveMultipartFile(file, userService.getUserFromToken(token));
     }
 
+    @DeleteMapping("/delete/{id}")
+    public void saveFile(@PathVariable("id") Long id) {
+        uploadService.deleteFile(id);
+    }
+
     @PostMapping("/anon/save")
     public List<Transaction> saveFile(@RequestParam(value = "file") MultipartFile file) throws IOException {
        return uploadService.parseMultiPartFileForAnon(file);

@@ -112,7 +112,7 @@ public class TransactionService {
 
         //then add each transaction according to the statement type aka key
         List<Transaction> transactions = new ArrayList<>();
-              if(userId != null)  repo.findByUserIdAndDateBetween(userId, startDate, endDate);
+              if(userId != null)  transactions = repo.findByUserIdAndDateBetween(userId, startDate, endDate);
               else transactions = transactionsFromAnon;
 
         for (Transaction t : transactions) {
