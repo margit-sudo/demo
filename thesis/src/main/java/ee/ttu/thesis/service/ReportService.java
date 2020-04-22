@@ -2,13 +2,16 @@ package ee.ttu.thesis.service;
 
 import ee.ttu.thesis.domain.*;
 import ee.ttu.thesis.repository.ReportRepository;
+import ee.ttu.thesis.repository.RowRepository;
 import ee.ttu.thesis.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +24,8 @@ public class ReportService {
     private final ReportRepository repo;
     private final TransactionService transactionService;
     private final UserRepository userRepo;
+    private final RowRepository rowRepo;
+    private Clock clock = Clock.system(ZoneId.of("Europe/Helsinki"));
 
     public Report createReportByUser(Long userId, Report reportFromFront){
         LocalDate startDate = reportFromFront.getStartDate();
@@ -33,9 +38,10 @@ public class ReportService {
                 user(userRepo.findById(userId).orElse(null)).
                 startDate(startDate).
                 endDate(endDate).
-                dateMade(LocalDate.now()).
+                dateMade(LocalDate.now(clock)).
                 rows(rows).build();
 
+        rowRepo.saveAll(rows);
         repo.save(r);
         return r;
     }
@@ -75,5 +81,9 @@ public class ReportService {
                 rows(rows).build();
 
         return r;
+    }
+
+    public List<Report> getReportsByUserId(Long userIdFromToken) {
+        return repo.findByUserId(userIdFromToken);
     }
 }

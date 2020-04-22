@@ -20,7 +20,8 @@ public class Report {
     @GeneratedValue
     private long id;
 
-    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany
+    @JoinColumn(name = "row_id", referencedColumnName = "id")
     private List<ReportRow> rows;
 
     private LocalDate startDate;

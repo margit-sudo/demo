@@ -1,6 +1,7 @@
 package ee.ttu.thesis.service;
 
 import ee.ttu.thesis.domain.*;
+import ee.ttu.thesis.repository.RuleRepository;
 import ee.ttu.thesis.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,10 @@ public class TransactionService {
 
     private final TransactionRepository repo;
     private final EnumService enumService;
+    private final RuleService ruleService;
 
     public List<Transaction> saveAll(List<Transaction> list) {
         return repo.saveAll(list);
-    }
-
-    public List<Transaction> getTransactionsList() {
-        return repo.findAll();
     }
 
     public List<Transaction> getTransactionsByUserId(Long userId) {
@@ -47,6 +45,21 @@ public class TransactionService {
             updateTransactionsWithBeginsRule(transactions, rule);
         } else if (rule.getType().equals("Ends")) {
             updateTransactionsWithEndsRule(transactions, rule);
+        }
+    }
+
+    public void updateTransactionIncomeStatementTypesWithList(User u, List<Transaction> transactions) {
+        List<Rule> rules = ruleService.getRuleListByUser(u.getId());
+        for (Rule rule : rules) {
+            if(rule.getType() != null) {
+                if (rule.getType().equals("Contains")) {
+                    updateTransactionsWithContainsRule(transactions, rule);
+                } else if (rule.getType().equals("Begins")) {
+                    updateTransactionsWithBeginsRule(transactions, rule);
+                } else if (rule.getType().equals("Ends")) {
+                    updateTransactionsWithEndsRule(transactions, rule);
+                }
+            }
         }
     }
 

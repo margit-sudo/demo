@@ -23,10 +23,10 @@ public class ReportController {
         return reportService.createReportByUser(userService.getUserIdFromToken(token), r);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/all")
     @ResponseBody
-    public Report getReportByUser(@PathVariable("id") Long id) {
-        return reportService.getReportById(id);
+    public List<Report> getReportsByUser(@RequestHeader(name = "Authorization") String token) {
+        return reportService.getReportsByUserId(userService.getUserIdFromToken(token));
     }
 
     @PostMapping("/generate/anon")

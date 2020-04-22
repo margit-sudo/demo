@@ -55,6 +55,7 @@ public class UploadService {
             SwedbankCsvFileParser parser = new SwedbankCsvFileParser();
             list =  parser.parseCsvFile(file, user);
         }
+        transactionService.updateTransactionIncomeStatementTypesWithList(user, list);
         return list;
     }
 

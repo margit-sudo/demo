@@ -27,8 +27,4 @@ public class ReportRow {
     @ManyToMany
     @JoinColumn(name = "transaction_id", referencedColumnName = "id")
     private List<Transaction> transactions;
-
-    @ManyToOne
-    @JoinColumn(name = "report_id", referencedColumnName = "id")
-    private Report report;
 }
