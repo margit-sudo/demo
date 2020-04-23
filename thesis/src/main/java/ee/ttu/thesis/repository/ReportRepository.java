@@ -1,6 +1,5 @@
 package ee.ttu.thesis.repository;
 
-import ee.ttu.thesis.domain.File;
 import ee.ttu.thesis.domain.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 

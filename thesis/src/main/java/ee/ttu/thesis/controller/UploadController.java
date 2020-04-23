@@ -19,22 +19,22 @@ public class UploadController {
     private final UploadService uploadService;
     private final UserService userService;
 
-    @GetMapping("/all")
+    @GetMapping
     public List<File> getAllFilesByUserId(@RequestHeader(name = "Authorization") String token){
         return uploadService.getFilesListByUserId(userService.getUserIdFromToken(token));
     }
 
-    @PostMapping("/save")
+    @PostMapping
     public void saveFile(@RequestParam(value = "file") MultipartFile file, @RequestHeader(name = "Authorization") String token) throws IOException {
         uploadService.parseAndSaveMultipartFile(file, userService.getUserFromToken(token));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void saveFile(@PathVariable("id") Long id) {
         uploadService.deleteFile(id);
     }
 
-    @PostMapping("/anon/save")
+    @PostMapping("/anon")
     public List<Transaction> saveFile(@RequestParam(value = "file") MultipartFile file) throws IOException {
        return uploadService.parseMultiPartFileForAnon(file);
     }

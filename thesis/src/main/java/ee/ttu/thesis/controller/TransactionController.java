@@ -22,14 +22,14 @@ public class TransactionController {
         return transactionService.getTransactionsByUserId(userService.getUserIdFromToken(token));
     }
 
-    @PostMapping(value = "/update/{id}")
+    @PostMapping(value = "/{id}")
     @ResponseBody
-    public void updateTransactionIncomeStatementTypes(@PathVariable("id") Long id, @RequestBody String type){
+    public void updateTransactionIncomeStatementTypes(@PathVariable("id") Long transactionId, @RequestBody String type){
         IncomeStatementType incomeStatementType = IncomeStatementType.valueOf(type);
-        transactionService.updateOneTransactionIncomeStatementType(id, incomeStatementType);
+        transactionService.updateOneTransactionIncomeStatementType(transactionId, incomeStatementType);
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/{id}")
     public void deleteTransactionById(@PathVariable("id") Long id){
         transactionService.deleteTransaction(id);
     }

@@ -20,7 +20,7 @@ public class RuleController {
     private final TransactionService transactionService;
     private final UserService userService;
 
-    @PostMapping("/insert")
+    @PostMapping
     @ResponseBody
     public void insertNewRule(@RequestBody Rule rule, @RequestHeader(name = "Authorization") String token){
         User user = userService.getUserFromToken(token);
@@ -33,7 +33,7 @@ public class RuleController {
         return ruleService.getRuleListByUser(userService.getUserIdFromToken(token));
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/{id}")
     public void deleteRuleById(@PathVariable("id") Long id){
        ruleService.deleteRule(id);
     }

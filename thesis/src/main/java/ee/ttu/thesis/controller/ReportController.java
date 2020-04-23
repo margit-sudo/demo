@@ -17,7 +17,7 @@ public class ReportController {
     private final ReportService reportService;
     private final UserService userService;
 
-    @PostMapping("/get")
+    @PostMapping("/generate")
     @ResponseBody
     public Report getReportByUser(@RequestHeader(name = "Authorization") String token, @RequestBody Report r) {
         return reportService.createReportByUser(userService.getUserIdFromToken(token), r);

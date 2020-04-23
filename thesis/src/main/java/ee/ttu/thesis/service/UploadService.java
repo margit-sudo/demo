@@ -10,11 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import sun.security.pkcs.ParsingException;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,10 +24,6 @@ public class UploadService {
 
     private final UploadRepository repo;
     private final TransactionService transactionService;
-
-    public List<File> getFilesList() {
-        return repo.findAll();
-    }
 
     public List<File> getFilesListByUserId(Long userId) {
         return repo.findByUserId(userId);
@@ -39,12 +35,13 @@ public class UploadService {
 
     public void parseAndSaveMultipartFile(MultipartFile file, User user) throws IOException {
         List<Transaction> transactionList = parseTransactions(file, user);
-        transactionList = transactionService.saveAll(transactionList);
+        transactionList = transactionService.updateTransactionIncomeStatementTypesWithList(user, transactionList);
+        transactionService.saveAll(transactionList);
         saveFile(File.builder().name(file.getOriginalFilename()).uploadDate(LocalDate.now()).user(user).transactions(transactionList).build());
     }
 
     private List<Transaction> parseTransactions(MultipartFile file, User user) throws IOException {
-        List<Transaction> list = new ArrayList<>();
+        List<Transaction> list;
         String fileName = file.getOriginalFilename();
 
         if(FilenameUtils.getExtension(fileName).equals("xml")){
@@ -55,7 +52,9 @@ public class UploadService {
             SwedbankCsvFileParser parser = new SwedbankCsvFileParser();
             list =  parser.parseCsvFile(file, user);
         }
-        transactionService.updateTransactionIncomeStatementTypesWithList(user, list);
+        else {
+            throw new ParsingException("File type must be in CSV or XML format!");
+        }
         return list;
     }
 
