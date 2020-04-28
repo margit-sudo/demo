@@ -22,7 +22,7 @@ public class TransactionController {
         return transactionService.getTransactionsByUserId(userService.getUserIdFromToken(token));
     }
 
-    @PostMapping(value = "/{id}")
+    @PutMapping(value = "/{id}")
     @ResponseBody
     public void updateTransactionIncomeStatementTypes(@PathVariable("id") Long transactionId, @RequestBody String type){
         IncomeStatementType incomeStatementType = IncomeStatementType.valueOf(type);

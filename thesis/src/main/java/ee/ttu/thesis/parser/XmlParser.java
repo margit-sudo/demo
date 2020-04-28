@@ -1,5 +1,6 @@
 package ee.ttu.thesis.parser;
 
+import ee.ttu.thesis.domain.File;
 import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.domain.User;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class XmlParser {
 
-    public List<Transaction> parseFile(MultipartFile file, User user) {
+    public List<Transaction> parseFile(MultipartFile file, User user, File dbFile) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         List<Transaction> transactions = new ArrayList<>();
@@ -37,7 +38,7 @@ public class XmlParser {
             NodeList nodeList = doc.getElementsByTagName("Ntry");
 
             for (int i = 0; i < nodeList.getLength(); i++) {
-                transactions.add(getTransaction(nodeList.item(i), user));
+                transactions.add(getTransaction(nodeList.item(i), user, dbFile));
             }
         } catch (SAXException | ParserConfigurationException | IOException e) {
             e.printStackTrace();
@@ -56,7 +57,7 @@ public class XmlParser {
     }
 
 
-    private static Transaction getTransaction(Node node, User u) {
+    private static Transaction getTransaction(Node node, User u, File file) {
         Transaction t = new Transaction();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;

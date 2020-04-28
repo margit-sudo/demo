@@ -1,5 +1,6 @@
 package ee.ttu.thesis.parser;
 
+import ee.ttu.thesis.domain.File;
 import ee.ttu.thesis.domain.IncomeStatementType;
 import ee.ttu.thesis.domain.Transaction;
 import ee.ttu.thesis.domain.User;
@@ -18,7 +19,7 @@ import java.util.List;
 public class SwedbankCsvFileParser implements CsvFileParser {
 
     @Override
-    public List<Transaction>  parseCsvFile(MultipartFile file, User user) throws IOException {
+    public List<Transaction>  parseCsvFile(MultipartFile file, User user, File dbFile) throws IOException {
         String line;
         List<Transaction> transactionList = new ArrayList<>();
 

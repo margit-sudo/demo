@@ -2,6 +2,7 @@ package ee.ttu.thesis.service;
 
 import ee.ttu.thesis.domain.*;
 import ee.ttu.thesis.repository.TransactionRepository;
+import ee.ttu.thesis.repository.UploadRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class TransactionService {
     private final TransactionRepository repo;
     private final EnumService enumService;
     private final RuleService ruleService;
+    private final UploadRepository uploadRepo;
 
     public void saveAll(List<Transaction> list) {
          repo.saveAll(list);
@@ -140,6 +142,15 @@ public class TransactionService {
     }
 
     public void deleteTransaction(Long id) {
-        repo.deleteById(id);
+        File f = uploadRepo.findByTransactionsId(id);
+        List<Transaction> fileTransactions = f.getTransactions();
+        int i = 0;
+        for (Transaction t : fileTransactions) {
+            if(t.getId().equals(id)) {
+                fileTransactions.remove(i);
+                return;
+            }
+            i++;
+        }
     }
 }

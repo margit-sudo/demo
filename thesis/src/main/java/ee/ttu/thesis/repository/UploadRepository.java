@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UploadRepository extends JpaRepository<File, Long> {
     List<File> findByUserId(Long userId);
+    File findByTransactionsId(Long transactionId);
 }

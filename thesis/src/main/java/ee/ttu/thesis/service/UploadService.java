@@ -34,23 +34,26 @@ public class UploadService {
     }
 
     public void parseAndSaveMultipartFile(MultipartFile file, User user) throws IOException {
-        List<Transaction> transactionList = parseTransactions(file, user);
+        File f = File.builder().name(file.getOriginalFilename()).uploadDate(LocalDate.now()).user(user).build();
+        f = repo.save(f);
+        List<Transaction> transactionList = parseTransactions(file, user, f);
         transactionList = transactionService.updateTransactionIncomeStatementTypesWithList(user, transactionList);
         transactionService.saveAll(transactionList);
-        saveFile(File.builder().name(file.getOriginalFilename()).uploadDate(LocalDate.now()).user(user).transactions(transactionList).build());
+        f.setTransactions(transactionList);
+        saveFile(f);
     }
 
-    private List<Transaction> parseTransactions(MultipartFile file, User user) throws IOException {
+    private List<Transaction> parseTransactions(MultipartFile file, User user, File dbFile) throws IOException {
         List<Transaction> list;
         String fileName = file.getOriginalFilename();
 
         if(FilenameUtils.getExtension(fileName).equals("xml")){
             XmlParser p = new XmlParser();
-            list = p.parseFile(file, user);
+            list = p.parseFile(file, user, dbFile);
         }
         else if(FilenameUtils.getExtension(fileName).equals("csv")){
             SwedbankCsvFileParser parser = new SwedbankCsvFileParser();
-            list =  parser.parseCsvFile(file, user);
+            list =  parser.parseCsvFile(file, user, dbFile);
         }
         else {
             throw new ParsingException("File type must be in CSV or XML format!");
@@ -59,7 +62,7 @@ public class UploadService {
     }
 
     public List<Transaction> parseMultiPartFileForAnon(MultipartFile file) throws IOException {
-        return parseTransactions(file, null);
+        return parseTransactions(file, null, null);
     }
 
     public void deleteFile(Long id) {
