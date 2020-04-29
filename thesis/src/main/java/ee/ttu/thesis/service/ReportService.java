@@ -28,8 +28,8 @@ public class ReportService {
     private Clock clock = Clock.system(ZoneId.of("Europe/Helsinki"));
 
     public Report createReportByUser(Long userId, Report reportFromFront){
-        LocalDate startDate = reportFromFront.getStartDate();
-        LocalDate endDate = reportFromFront.getEndDate();
+        LocalDate startDate = (reportFromFront.getStartDate()).plusDays((long) 1);
+        LocalDate endDate = (reportFromFront.getEndDate()).plusDays((long) 1);
 
         List<ReportRow> rows = createReportRows(userId, startDate, endDate, null);
         rows = removeZeroSums(rows);
@@ -85,5 +85,9 @@ public class ReportService {
 
     public List<Report> getReportsByUserId(Long userIdFromToken) {
         return repo.findByUserId(userIdFromToken);
+    }
+
+    public void deleteReport(Long id) {
+        repo.deleteById(id);
     }
 }

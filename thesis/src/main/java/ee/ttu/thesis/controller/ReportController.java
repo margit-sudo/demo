@@ -33,4 +33,9 @@ public class ReportController {
     public Report getReportByAnon(@RequestBody List<Transaction> transactions) {
         return reportService.createReportForAnon(transactions);
     }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteReport(@PathVariable("id") Long id) {
+         reportService.deleteReport(id);
+    }
 }
