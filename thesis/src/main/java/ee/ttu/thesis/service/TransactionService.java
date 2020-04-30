@@ -67,15 +67,18 @@ public class TransactionService {
 
     private void updateTransactionsWithContainsRule(List<Transaction> transactions, Rule rule) {
         for (Transaction t : transactions) {
-            if (rule.getTransactionDetails() != null && t.getDetails() != null &&
+            if (!rule.getTransactionDetails().equals("") &&
+                    rule.getTransactionDetails() != null && t.getDetails() != null &&
                     t.getDetails().contains(rule.getTransactionDetails())) {
                 t.setIncomeStatementType(rule.getIncomeStatementType());
             }
-            if (rule.getTransactionBeneficiaryOrPayerAccount() != null && t.getBeneficiaryOrPayerAccount() != null &&
+            if (!rule.getTransactionBeneficiaryOrPayerAccount().equals("") &&
+                    rule.getTransactionBeneficiaryOrPayerAccount() != null && t.getBeneficiaryOrPayerAccount() != null &&
                     t.getBeneficiaryOrPayerAccount().contains(rule.getTransactionBeneficiaryOrPayerAccount())) {
                 t.setIncomeStatementType(rule.getIncomeStatementType());
             }
-            if (rule.getTransactionBeneficiaryOrPayerName() != null && t.getBeneficiaryOrPayerName() != null &&
+            if (!rule.getTransactionBeneficiaryOrPayerName().equals("") &&
+                    rule.getTransactionBeneficiaryOrPayerName() != null && t.getBeneficiaryOrPayerName() != null &&
                     t.getBeneficiaryOrPayerName().contains(rule.getTransactionBeneficiaryOrPayerName())) {
                 t.setIncomeStatementType(rule.getIncomeStatementType());
             }
