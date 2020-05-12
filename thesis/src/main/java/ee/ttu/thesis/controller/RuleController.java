@@ -22,10 +22,11 @@ public class RuleController {
 
     @PostMapping
     @ResponseBody
-    public void insertNewRule(@RequestBody Rule rule, @RequestHeader(name = "Authorization") String token){
+    public Rule insertNewRule(@RequestBody Rule rule, @RequestHeader(name = "Authorization") String token){
         User user = userService.getUserFromToken(token);
-        ruleService.insertNewRule(rule, user);
+        Rule r = ruleService.insertNewRule(rule, user);
         transactionService.updateTransactionIncomeStatementTypesWithRule(rule, user);
+        return r;
     }
 
     @GetMapping("/all")

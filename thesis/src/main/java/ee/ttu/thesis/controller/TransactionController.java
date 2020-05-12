@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -24,9 +25,9 @@ public class TransactionController {
 
     @PutMapping(value = "/{id}")
     @ResponseBody
-    public void updateTransactionIncomeStatementTypes(@PathVariable("id") Long transactionId, @RequestBody String type){
+    public Optional<Transaction> updateTransactionIncomeStatementTypes(@PathVariable("id") Long transactionId, @RequestBody String type){
         IncomeStatementType incomeStatementType = IncomeStatementType.valueOf(type);
-        transactionService.updateOneTransactionIncomeStatementType(transactionId, incomeStatementType);
+        return transactionService.updateOneTransactionIncomeStatementType(transactionId, incomeStatementType);
     }
 
     @DeleteMapping(value = "/{id}")

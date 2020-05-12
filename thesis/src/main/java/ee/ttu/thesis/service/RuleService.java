@@ -16,11 +16,11 @@ public class RuleService {
 
     private final RuleRepository repo;
 
-    public void insertNewRule(Rule rule, User u) {
+    public Rule insertNewRule(Rule rule, User u) {
         if(rule.getName() == null) rule.setName("Default");
         rule.setUser(u);
         rule.setIsAddedByUser(true);
-        repo.save(rule);
+        return repo.save(rule);
     }
 
     public List<Rule> getRuleList() {
