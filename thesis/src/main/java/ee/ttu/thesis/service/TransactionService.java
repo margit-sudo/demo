@@ -67,18 +67,15 @@ public class TransactionService {
 
     private void updateTransactionsWithContainsRule(List<Transaction> transactions, Rule rule) {
         for (Transaction t : transactions) {
-            if (!rule.getTransactionDetails().equals("") &&
-                    rule.getTransactionDetails() != null && t.getDetails() != null &&
-                    t.getDetails().contains(rule.getTransactionDetails())) {
+            if (rule.getTransactionDetails() != null && t.getDetails() != null && !rule.getTransactionDetails().equals("") &&
+            t.getDetails().contains(rule.getTransactionDetails())) {
                 t.setIncomeStatementType(rule.getIncomeStatementType());
             }
-            if (!rule.getTransactionBeneficiaryOrPayerAccount().equals("") &&
-                    rule.getTransactionBeneficiaryOrPayerAccount() != null && t.getBeneficiaryOrPayerAccount() != null &&
+            if (rule.getTransactionBeneficiaryOrPayerAccount() != null && t.getBeneficiaryOrPayerAccount() != null && !rule.getTransactionBeneficiaryOrPayerAccount().equals("") &&
                     t.getBeneficiaryOrPayerAccount().contains(rule.getTransactionBeneficiaryOrPayerAccount())) {
                 t.setIncomeStatementType(rule.getIncomeStatementType());
             }
-            if (!rule.getTransactionBeneficiaryOrPayerName().equals("") &&
-                    rule.getTransactionBeneficiaryOrPayerName() != null && t.getBeneficiaryOrPayerName() != null &&
+            if (rule.getTransactionBeneficiaryOrPayerName() != null && t.getBeneficiaryOrPayerName() != null && !rule.getTransactionBeneficiaryOrPayerName().equals("") &&
                     t.getBeneficiaryOrPayerName().contains(rule.getTransactionBeneficiaryOrPayerName())) {
                 t.setIncomeStatementType(rule.getIncomeStatementType());
             }

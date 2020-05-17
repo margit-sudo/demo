@@ -1,0 +1,745 @@
+{
+	"info": {
+		"_postman_id": "8328c5da-66f7-4c91-9e15-c8da9009d28b",
+		"name": "thesis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "with user account",
+			"item": [
+				{
+					"name": "create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c1f74535-181d-4a2a-b100-0badb22f4689",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User registered\", function () {",
+									"  pm.expect(jsonData.message).to.eql(\"User registered successfully!\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"kasutaja1\",\r\n  \"email\": \"email@ttu.ee\",\r\n  \"password\": \"myPassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}api/auth/register",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "log in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a60bacfd-abe2-4316-97c2-4de44a5bc91e",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"token\", jsonData.token);",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Logged in\", function () {",
+									"  pm.expect(jsonData.username).to.eql(\"kasutaja1\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"kasutaja1\",\r\n  \"password\": \"myPassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}api/auth/signin",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload new file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "08d868e2-f317-4239-ad77-f492a8e38c1c",
+								"exec": [
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"name": "Content-Type",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"contentType": "",
+									"type": "file",
+									"src": "/C:/Users/birgi/Documents/Äriinfotehnoloogia/lõputöö/CVS failid jne/2019 full xml.xml"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}api/upload",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get transactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e7d19c54-f114-4ea1-9b00-43253e235f41",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"count is 15\", function () {",
+									"  pm.expect(body.length).to.eql(15);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}api/transactions/all",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"transactions",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "define transactions income statement type",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8a7a87b4-f054-482d-8969-ca31a21495d2",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"incomeStatementType is correct\", function () {",
+									"  pm.expect(jsonData.incomeStatementType).to.eql(\"MÜÜGITULU\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "MÜÜGITULU"
+						},
+						"url": {
+							"raw": "{{domain}}api/transactions/{{transactionId}}",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"transactions",
+								"{{transactionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add rule",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "281b6774-e2ca-49fc-be7c-7351d949deec",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"ruleId\", jsonData.id);",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Rule details defined\", function () {",
+									"  pm.expect(jsonData.transactionDetails).to.eql(\"kuutasu\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"transactionDetails\": \"kuutasu\",\r\n  \"incomeStatementType\": \"MÜÜGITULU\",\r\n  \"type\": \"CONTAINS\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}api/rule",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"rule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "generate income statement report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "548d35c9-6d6c-4c6d-baca-244137d5706a",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"reportId\", jsonData.id);",
+									"",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"count is 2\", function () {",
+									"  pm.expect(body.rows.length).to.eql(2);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"startDate\": \"2019-01-01\",\r\n  \"endDate\": \"2020-01-01\"\r\n\t\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}api/report/generate",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"report",
+								"generate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete report",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}api/report/{{reportId}}",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"report",
+								"{{reportId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check report is deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5fcc0376-b358-4c6a-a8e6-e2e6901c4b24",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"count is 0\", function () {",
+									"  pm.expect(body.length).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}api/report/all",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"report",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete rule",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}api/rule/{{ruleId}}",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"rule",
+								"{{ruleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check rule is deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2eba5241-54f5-44ee-ab1d-d421a01e1c64",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"count is 0\", function () {",
+									"  pm.expect(body.length).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}api/rule/all",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"rule",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "85b23f47-778b-42ac-8bed-f1f0ddbb58e7",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}api/transactions/{{transactionId}}",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"transactions",
+								"{{transactionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check transactions is deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e7d19c54-f114-4ea1-9b00-43253e235f41",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"count is 14\", function () {",
+									"  pm.expect(body.length).to.eql(14);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}api/transactions/all",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"transactions",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "without user account",
+			"item": [
+				{
+					"name": "upload new file ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "08d868e2-f317-4239-ad77-f492a8e38c1c",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"count is 15\", function () {",
+									"  pm.expect(body.length).to.eql(15);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"contentType": "",
+									"type": "file",
+									"src": "/C:/Users/birgi/Documents/Äriinfotehnoloogia/lõputöö/CVS failid jne/2019 full xml.xml"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}api/upload/anon",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"upload",
+								"anon"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "generate income statement report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b9797d8a-13ca-4bd4-a383-0078b26eb979",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Response code 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"count is 1\", function () {",
+									"  pm.expect(body.rows.length).to.eql(1);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"id\": 5,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-05-27\",\r\n        \"beneficiaryOrPayerAccount\": null,\r\n        \"beneficiaryOrPayerName\": null,\r\n        \"details\": \"Kaardi 547372******1723 kuutasu 05.2019\",\r\n        \"amount\": -1.50,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 6,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-06-16\",\r\n        \"beneficiaryOrPayerAccount\": \"EE232200221016611372\",\r\n        \"beneficiaryOrPayerName\": \"OÜ EVENTECH\",\r\n        \"details\": \"Arve nr. 191779\",\r\n        \"amount\": -46.80,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 7,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-06-16\",\r\n        \"beneficiaryOrPayerAccount\": null,\r\n        \"beneficiaryOrPayerName\": null,\r\n        \"details\": \"MK teenustasu\",\r\n        \"amount\": -0.16,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 8,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-06-27\",\r\n        \"beneficiaryOrPayerAccount\": null,\r\n        \"beneficiaryOrPayerName\": null,\r\n        \"details\": \"Kaardi 547372******1723 kuutasu 06.2019\",\r\n        \"amount\": -1.50,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 9,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-07-27\",\r\n        \"beneficiaryOrPayerAccount\": null,\r\n        \"beneficiaryOrPayerName\": null,\r\n        \"details\": \"Kaardi 547372******1723 kuutasu 07.2019\",\r\n        \"amount\": -1.50,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 10,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-08-01\",\r\n        \"beneficiaryOrPayerAccount\": \"EE232200221016611372\",\r\n        \"beneficiaryOrPayerName\": \"OÜ EVENTECH\",\r\n        \"details\": \"Arve nr. 192341\",\r\n        \"amount\": -134.40,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 11,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-08-01\",\r\n        \"beneficiaryOrPayerAccount\": null,\r\n        \"beneficiaryOrPayerName\": null,\r\n        \"details\": \"MK teenustasu\",\r\n        \"amount\": -0.16,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 12,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-08-01\",\r\n        \"beneficiaryOrPayerAccount\": \"EE961700017001314830\",\r\n        \"beneficiaryOrPayerName\": \"Marko Kaar\",\r\n        \"details\": \"kuluaruanne 1 ja 2\",\r\n        \"amount\": -284.95,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 13,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-08-01\",\r\n        \"beneficiaryOrPayerAccount\": null,\r\n        \"beneficiaryOrPayerName\": null,\r\n        \"details\": \"MK teenustasu\",\r\n        \"amount\": -0.38,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 14,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-08-08\",\r\n        \"beneficiaryOrPayerAccount\": \"EE961700017001314830\",\r\n        \"beneficiaryOrPayerName\": \"KAAR MARKO\",\r\n        \"details\": \"Firma kapitali osamakse 1\",\r\n        \"amount\": 250.00,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"CRDT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 15,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-08-09\",\r\n        \"beneficiaryOrPayerAccount\": \"EE617700771003063878\",\r\n        \"beneficiaryOrPayerName\": \"KEA Grupp OÜ\",\r\n        \"details\": \"Arve nr 190099\",\r\n        \"amount\": -75.00,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 16,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-08-09\",\r\n        \"beneficiaryOrPayerAccount\": null,\r\n        \"beneficiaryOrPayerName\": null,\r\n        \"details\": \"MK teenustasu\",\r\n        \"amount\": -0.38,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 17,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-08-27\",\r\n        \"beneficiaryOrPayerAccount\": null,\r\n        \"beneficiaryOrPayerName\": null,\r\n        \"details\": \"Kaardi 547372******1723 kuutasu 08.2019\",\r\n        \"amount\": -1.50,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"DBIT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    },\r\n    {\r\n        \"id\": 18,\r\n        \"accountNumber\": null,\r\n        \"date\": \"2019-09-18\",\r\n        \"beneficiaryOrPayerAccount\": \"EE691010220210733225\",\r\n        \"beneficiaryOrPayerName\": \"SIKOPPEL OÜ\",\r\n        \"details\": \"ARVE NR 8, Esinemine 12.09\",\r\n        \"amount\": 300.00,\r\n        \"currency\": \"EUR\",\r\n        \"debitOrCredit\": \"CRDT\",\r\n        \"incomeStatementType\": \"MÄÄRAMATA\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}api/report/generate/anon",
+							"host": [
+								"{{domain}}api"
+							],
+							"path": [
+								"report",
+								"generate",
+								"anon"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "1bd3d7d9-09dc-4194-b768-5bc180bfc12a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "8105ba6d-dbcf-4c19-b1cd-33c488cde921",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "7f7ff190-d77c-4d16-901d-d4636a56fa12",
+			"key": "domain",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
