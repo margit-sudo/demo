@@ -27,7 +27,7 @@ public class RuleServiceTest {
     private RuleService service;
 
     @Test
-    public void testInsertNewRule() throws Exception {
+    public void testInsertNewRule() {
         when(repo.save(any(Rule.class))).then(returnsFirstArg());
         User user = getUser();
         Rule rule = getRule(user);
@@ -50,8 +50,6 @@ public class RuleServiceTest {
         return new User(2L,
                 "markoka", null, "asd", null);
     }
-
-
 
     @Test
     public void testDeleteRule()  {
