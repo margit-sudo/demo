@@ -46,7 +46,7 @@ public class ReportService {
         return r;
     }
 
-    private List<ReportRow> removeZeroSums(List<ReportRow> rows) {
+    public List<ReportRow> removeZeroSums(List<ReportRow> rows) {
         List<ReportRow> rowsWithoutZeroSum = new ArrayList<>();
         for (ReportRow row : rows) {
             if(row.getSum() != BigDecimal.ZERO) rowsWithoutZeroSum.add(row);
