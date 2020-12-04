@@ -26,6 +26,12 @@ public class ReportServiceTest {
         assertThat(testRows.size()).isEqualTo(1);
     }
 
+    @Test
+    public void testRemoveZeroSumsFails() {
+        List<ReportRow> testRows = service.removeZeroSums(getRows());
+        assertThat(testRows.size()).isEqualTo(2);
+    }
+
     private List<ReportRow> getRows() {
         ReportRow r1 = new ReportRow(1L, IncomeStatementType.INTRESSIKULUD, BigDecimal.valueOf(100), null);
         ReportRow r2 = new ReportRow(2L, IncomeStatementType.EMAETTEVÕTJA_AKTSIONÄRIDE_VÕI_OSANIKE_OSA_KASUMIST, BigDecimal.ZERO, null);
